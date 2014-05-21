@@ -5,7 +5,7 @@ require 'sf-thinclient/version'
 
 Gem::Specification.new do |gem|
   gem.name          = "sf-thinclient"
-  gem.version       = Sf::Thinclient::VERSION
+  gem.version       = Thinclient::VERSION
   gem.authors       = ["wangbaomi"]
   gem.email         = ["system1029@gmail.com"]
   gem.description   = %q{SSL ThinClient}
