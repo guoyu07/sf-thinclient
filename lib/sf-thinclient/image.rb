@@ -2,7 +2,7 @@
 module ThinClient
 	class Image
 		# 图片匹配程序ImageMatch.exe.如果没有找到则返回NO_IMAGEMATCH
-		def self.setImageMatch(path)
+		def self.setImageMatch()
 			@ImageMatch = File.expand_path(File.join(File.join(File.dirname(__FILE__),"/../../ext/ImageMatch.exe")))
 			if not File.exist?(@ImageMatch)
 				print("ImageMatch.exe Not Found\n")
