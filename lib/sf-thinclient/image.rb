@@ -4,10 +4,10 @@ module ThinClient
 		# 图片匹配程序ImageMatch.exe.如果没有找到则返回NO_IMAGEMATCH
 		def self.setImageMatch(path = "ImageMatch.exe")
 			@ImageMatch = path.nil? ? "ImageMatch.exe" : path
-			if not File.exist?(@ImageMatch)
-				print("ImageMatch.exe Not Found\n")
-				return ThinClient::Error::NO_IMAGEMATCH
-			end
+			# if not File.exist?(@ImageMatch)
+			# 	print("ImageMatch.exe Not Found\n")
+			# 	return ThinClient::Error::NO_IMAGEMATCH
+			# end
 			return ThinClient::Error::SUCCESS
 		end
 
@@ -25,7 +25,7 @@ module ThinClient
 				print("Image #{img2} Not Found\n")
 				return position
 			end
-
+		
 			info = `#{@ImageMatch} #{img1} #{img2} #{similar}`
 			if 0 === info.split(/,/)[0]
 				print("#{img1} and #{img2} Not Match\n")
@@ -40,8 +40,8 @@ module ThinClient
 
 		# 在当前屏幕中查找指定图片的坐标
 		def self.getPositionOnScreen(img, similar = 0.8)
-			if false == screenCap("tmp.png")
-				return false
+			if ThinClient::Error::SCREENCAP_FAIL == screenCap("tmp.png")
+				return getPosition("", "")
 			end
 			return getPosition("tmp.png", img, similar)
 		end
@@ -57,7 +57,7 @@ module ThinClient
 
 		# 在当前屏幕中是否存在指定图片
 		def self.includeOnScreen?(img, similar = 0.8)
-			if false == screenCap("tmp.png")
+			if ThinClient::Error::SCREENCAP_FAIL == screenCap("tmp.png")
 				return false
 			end
 			return include?("tmp.png", img, similar)
@@ -70,33 +70,76 @@ module ThinClient
 			system("adb shell screencap -p #{tempFile}")
 			system("adb pull #{tempFile} #{name}")
 			unless File.exist?(name)
-				print "Screencap Fail"
-				return false
+				print "Screencap Fail\n"
+				return ThinClient::Error::SCREENCAP_FAIL
 			end
-			return true
+			return ThinClient::Error::SUCCESS
 
 		end
 
 		# 通过鼠标点击图片(无论是瘦客户机的还是虚拟桌面的都可以点击到)
 		def self.mouseClick(img, similar = 0.8)
 			position = getPositionOnScreen(img, similar)
+			#puts position
 			if (position[:X] === 0 || position[:Y] === 0)
 				return false
 			end
 			#print ("position:#{position}\n")
-			Mouse.moveTo(position[:X], position[:Y])
-			Mouse.click()
+			tmp = Mouse.click(position[:X], position[:Y])
+			if (tmp === false)
+				return false
+			end
 			return true
 		end
 
 		# 触摸图片(这个操作无法触摸到虚拟桌面内的图片)
 		def self.tap(img, similar = 0.8)
 			position = getPositionOnScreen(img, similar)
+
 			if (position[:X] === 0 || position[:Y] === 0)
 				return false
 			end
 			#print ("position:#{position}\n")
 			system("adb shell input tap #{position[:X]} #{position[:Y]}")
+			return true
 		end
+
+		# 双击图片(移动鼠标,双击)
+		def self.doubleClick(img, similar = 0.8)
+			position = getPositionOnScreen(img, similar)
+
+			if (position[:X] === 0 || position[:Y] === 0)
+				return false
+			end
+			return Mouse.doubleClick(position[:X], position[:Y])
+		end
+
+		# 长按图片
+		def self.press(img, t = 2, similar = 0.8)
+			position = getPositionOnScreen(img, similar)
+			if (position[:X] === 0 || position[:Y] === 0)
+				return false
+			end
+			return Mouse.press(t, position[:X], position[:Y])
+		end
+
+		# 拖拽图片
+		def self.dragDrop(img, similar = 0.8,  x = 0, y = 0)
+			position = getPositionOnScreen(img, similar)
+			if (position[:X] === 0 || position[:Y] === 0)
+				return false
+			end
+			return Mouse.dragDrop(position[:X], position[:Y], x, y)
+		end
+
+		# 右击图片
+		def self.rightClick(img, similar = 0.8)
+			position = getPositionOnScreen(img, similar)
+			if (position[:X] === 0 || position[:Y] === 0)
+				return false
+			end
+			return Mouse.rightClick(position[:X], position[:Y])
+		end
+
 	end
 end

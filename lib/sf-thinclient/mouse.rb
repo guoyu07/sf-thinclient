@@ -51,11 +51,15 @@ module ThinClient
 			rescue => ex
 			  Log.error("#{ex}")
 			  print("#{ex}")
+			  return false
 			end	
-			getMouseEvent()
-			n = n / (1 + @diffX)
+			if (false === getMouseEvent())
+				return false
+			end
+			#n = n / (1 + @diffX)
 			system("adb shell sendevent #{@mouseEvent} 2 0 -#{n}")
 			system("#{@SYN_EVENT}")
+			return true
 		end
 		# 向右移动(n个像素)
 		def self.right(n = 1)
@@ -64,11 +68,16 @@ module ThinClient
 			rescue => ex
 			  Log.error("#{ex}")
 			  print("#{ex}")
+			  return false
 			end	
-			getMouseEvent()
-			n = n / (1 + @diffX)
+			if (false === getMouseEvent())
+				return false
+			end
+			#n = n / (1 + @diffX)
+			#puts "right #{n}"
 			system("adb shell sendevent #{@mouseEvent} 2 0 #{n}")
 			system("#{@SYN_EVENT}")
+			return true
 		end
 		# 向上移动(n个像素)
 		def self.up(n = 1)
@@ -77,11 +86,15 @@ module ThinClient
 			rescue => ex
 			  Log.error("#{ex}")
 			  print("#{ex}")
+			  return false
 			end	
-			getMouseEvent()
-			n = n / (1 + @diffY)
+			if (false === getMouseEvent())
+				return false
+			end
+			#n = n / (1 + @diffY)
 			system("adb shell sendevent #{@mouseEvent} 2 1 -#{n}")
 			system("#{@SYN_EVENT}")
+			return true
 		end
 		# 向下移动(n个像素)
 		def self.down(n = 1)
@@ -90,11 +103,16 @@ module ThinClient
 			rescue => ex
 			  Log.error("#{ex}")
 			  print("#{ex}")
+			  return false
 			end	
-			getMouseEvent()
-			n = n / (1 + @diffY)
+			if (false === getMouseEvent())
+				return false
+			end
+			#n = n / (1 + @diffY)
+			#puts "down #{n}"
 			system("adb shell sendevent #{@mouseEvent} 2 1 #{n}")
 			system("#{@SYN_EVENT}")
+			return true
 		end
 
 		# 移动到某个位置
@@ -105,18 +123,33 @@ module ThinClient
 			if (x != nil && y != nil)
 				left(5000)
 				up(5000)
-				right(x)
-				down(y)
-				return 
+				tmp1 = right(x)
+				tmp2 = down(y)
+				if (tmp1 === false || tmp2 ===false)
+					return false
+				end
+				return true
 			end
-			if (x != nil)
+			if (x != nil && y == nil)
 				left(5000)
-				right(x)
+				tmp = right(x)
+				if (tmp === false)
+					return false
+				end
+				return true
 			end
-			if (y != nil)
+			if (y != nil && x == nil)
 				up(5000)
-				down(y)
+				tmp = down(y)
+				if (tmp === false)
+					return false
+				end
+				return true
 			end
+			if (x == nil && y == nil)
+				return true
+			end
+			return false
 		end
 
 
@@ -125,58 +158,88 @@ module ThinClient
 		def self.leftBtnDown()
 			system("adb shell sendevent #{@mouseEvent} 1 272 1")
 			system("#{@SYN_EVENT}")
+			return true
 		end
 		# 左键抬起
 		def self.leftBtnUp()
 			system("adb shell sendevent #{@mouseEvent} 1 272 0")
 			system("#{@SYN_EVENT}")
+			return true
 		end
 		# 右键按下
 		def self.rightBtnDown()
 			system("adb shell sendevent #{@mouseEvent} 1 273 1")
 			system("#{@SYN_EVENT}")
+			return true
 		end
 		# 右键抬起
 		def self.rightBtnUp()
 			system("adb shell sendevent #{@mouseEvent} 1 273 0")
 			system("#{@SYN_EVENT}")
+			return true
 		end
 		# 滚轮按下
 		def self.middleBtnDown()
 			system("adb shell sendevent #{@mouseEvent} 1 274 1")
 			system("#{@SYN_EVENT}")
+			return true
 		end
 		# 滚轮抬起
 		def self.middleBtnUp()
 			system("adb shell sendevent #{@mouseEvent} 1 274 0")
 			system("#{@SYN_EVENT}")
+			return true
 		end
 
 		# 单击(某个坐标)
 		def self.click(x = nil, y = nil)
-			moveTo(x, y)
-			leftBtnDown()
-			leftBtnUp()
+			tmp = moveTo(x, y)
+			if (tmp === false)
+				return false
+			end
+			tmp1 = leftBtnDown()
+			tmp2 = leftBtnUp()
+			if (tmp1 === false || tmp2 === false)
+				return false
+			end
+			return true
 		end
 		# 双击(某个坐标)
 		def self.doubleClick(x = nil, y = nil)
-			moveTo(x, y)
-			leftBtnDown()
-			leftBtnUp()
-			leftBtnDown()
-			leftBtnUp()
+			tmp = moveTo(x, y)
+			if (tmp === false)
+				return false
+			end
+			tmp1 = leftBtnDown()
+			tmp2 = leftBtnUp()
+			tmp3 = leftBtnDown()
+			tmp4 = leftBtnUp()
+			if (tmp1 === false || tmp2 ===false || tmp3 === false || tmp4 === false)
+				return false
+			end
+			return true
 		end
 		# 按下(按下时间,某个坐标)
 		def self.press(t = 2, x = nil, y = nil)
-			moveTo(x, y)
-			leftBtnDown()
+			tmp = moveTo(x, y)
+			if (tmp === false)
+				return false
+			end
+			tmp1 = leftBtnDown()
 			sleep(t)
-			leftBtnUp()
+			tmp2 = leftBtnUp()
+			if (tmp1 === false || tmp2 === false)
+				return false
+			end
+			return true
 		end
 		# 拖拽
 		def self.dragDrop(x1 = 0, y1 = 0, x2 = 0, y2 = 0)
-			moveTo(x1, y1)
-			leftBtnDown()
+			tmp = moveTo(x1, y1)
+			if (tmp === false)
+				return false
+			end
+			tmp1 = leftBtnDown()
 			#moveTo(x2, y2)
 			begin
 			  x1 = x1.to_i
@@ -186,16 +249,28 @@ module ThinClient
 			rescue => ex
 			  Log.error("#{ex}")
 			  print("#{ex}")
+			  return false
 			end	
-			right(x2 - x1)
-			down(y2 - y1)
-			leftBtnUp()
+			tmp2 = right(x2 - x1)
+			tmp3 = down(y2 - y1)
+			tmp4 = leftBtnUp()
+			if (tmp1 === false || tmp2 ===false || tmp3 === false || tmp4 === false)
+				return false
+			end
+			return true
 		end
 		# 右击
 		def self.rightClick(x = nil, y = nil)
-			moveTo(x, y)
-			rightBtnDown()
-			rightBtnUp()
+			tmp = moveTo(x, y)
+			if (tmp === false)
+				return false
+			end
+			tmp1 = rightBtnDown()
+			tmp2 = rightBtnUp()
+			if (tmp1 === false || tmp2 === false)
+				return false
+			end
+			return true
 		end
 
 		# 滚轮向下滚动
@@ -205,15 +280,17 @@ module ThinClient
 			rescue => ex
 			  Log.error("#{ex}")
 			  print("#{ex}")
+			  return false
 			end
 			if false === getMouseEvent()
-				return 
+				return false
 			end
 			while (n > 0)
 				system("adb shell sendevent #{@mouseEvent} 2 8 -1")
 				system("#{@SYN_EVENT}")
 				n -= 1
 			end
+			return true
 		end	
 		# 滚轮向上滚动
 		def self.rollUp(n = 1)
@@ -222,23 +299,30 @@ module ThinClient
 			rescue => ex
 			  Log.error("#{ex}")
 			  print("#{ex}")
+			  return false
 			end
 			if false === getMouseEvent()
-				return 
+				return false
 			end
 			while (n > 0)
 				system("adb shell sendevent #{@mouseEvent} 2 8 1")
 				system("#{@SYN_EVENT}")
 				n -= 1
 			end
+			return true
 		end
 		# 单击滚轮
-		def self.rollClick()
-			if false === getMouseEvent()
-				return 
+		def self.rollClick(x = nil, y = nil)
+			tmp = moveTo(x, y)
+			if (tmp === false)
+				return false
 			end
-			middleBtnDown()
-			middleBtnUp()
+			tmp1 = middleBtnDown()
+			tmp2 = middleBtnUp()
+			if (tmp1 === false || tmp2 === false)
+				return false
+			end
+			return true
 		end
 
 		# 单击图片

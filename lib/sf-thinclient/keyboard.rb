@@ -24,7 +24,7 @@ module ThinClient
 		      end
 		      @keyboardEvent = events[1].split(/\r/)[0]
 		      @SYN_EVENT = "adb shell sendevent #{@keyboardEvent} 0 0 0"
-		      #print @keyboardEvent
+		      
 		      return true
 		    rescue => ex
 		      Log.error("#{ex}")
@@ -40,9 +40,11 @@ module ThinClient
 			rescue => ex
 			  Log.error("#{ex}")
 			  print("#{ex}")
+			  return false
 			end		
 			system("adb shell sendevent #{@keyboardEvent} 1 #{keycode} 1")
 			system("#{@SYN_EVENT}")
+			return true
 		end
 
 		# 抬起键盘按键
@@ -52,23 +54,29 @@ module ThinClient
 			rescue => ex
 			  Log.error("#{ex}")
 			  print("#{ex}")
+			  return false
 			end	
 			system("adb shell sendevent #{@keyboardEvent} 1 #{keycode} 0")
 			system("#{@SYN_EVENT}")
+			return true
 		end
 
 		# 发送键盘按键,多个按键用"+"隔开(按键名称见KeyCode.Key)
 		def self.sendKeys(keys)
 			if false === getKeyboardEvent()
-				return 
+				return false
 			end
 			args = dealArg(keys)
+			if (args === false || args === [])
+				return false
+			end
 			args.each { |key|
 				keyDown(key)
 			}
 			args.each { |key|
 				keyUp(key)
 			}
+			return true
 		end
 
 		# 处理输入的参数
@@ -78,6 +86,7 @@ module ThinClient
 			rescue => ex
 			  Log.error("#{ex}")
 			  print("#{ex}")
+			  return false
 			end	
 			args = []
 			tmp = keys.split(/\+/)
