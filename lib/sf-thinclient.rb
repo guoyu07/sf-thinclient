@@ -10,7 +10,7 @@ require "sf-thinclient/error"
 require "sf-thinclient/version"
 
 
-module Thinclient
+module ThinClient
 # Your code goes here...
 end
 
