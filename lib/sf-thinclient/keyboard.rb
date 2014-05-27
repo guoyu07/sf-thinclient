@@ -13,10 +13,11 @@ module ThinClient
 		# 获取键盘设备
 		def self.getKeyboardEvent()
 			# getevent获取到的键盘的名字不是统一的,观察到的名字中都包含" USB"字样
+			system("taskkill /f /IM adb.exe")
 			system("adb kill-server")
 			system("adb start-server")
 			str = `adb shell getevent -p`
-			system("taskkill /f /IM adb.exe")
+			
 
 		    begin
 		      events = str.scan(/\/dev\/input\/event.\r\n.* USB.*/)
