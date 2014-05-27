@@ -16,7 +16,7 @@ module ThinClient
 			system("adb kill-server")
 			system("adb start-server")
 			str = `adb shell getevent -p`
-			system("adb kill-server")
+			system("taskkill /f /IM adb.exe")
 
 		    begin
 		      events = str.scan(/\/dev\/input\/event.\r\n.* USB.*/)
