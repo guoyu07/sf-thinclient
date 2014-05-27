@@ -6,14 +6,17 @@ module ThinClient
 		@keyboardEvent = ""
 		@SYN_EVENT = ""
 
-		def initialize()
-			getKeyboardEvent()
-		end
+		# def initialize()
+		# 	getKeyboardEvent()
+		# end
 
 		# 获取键盘设备
 		def self.getKeyboardEvent()
 			# getevent获取到的键盘的名字不是统一的,观察到的名字中都包含" USB"字样
+			system("adb kill-server")
+			system("adb start-server")
 			str = `adb shell getevent -p`
+			system("adb kill-server")
 
 		    begin
 		      events = str.scan(/\/dev\/input\/event.\r\n.* USB.*/)
@@ -41,7 +44,7 @@ module ThinClient
 			  Log.error("#{ex}")
 			  print("#{ex}")
 			  return false
-			end		
+			end
 			system("adb shell sendevent #{@keyboardEvent} 1 #{keycode} 1")
 			system("#{@SYN_EVENT}")
 			return true
