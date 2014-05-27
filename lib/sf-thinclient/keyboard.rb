@@ -6,18 +6,18 @@ module ThinClient
 		@keyboardEvent = ""
 		@SYN_EVENT = ""
 
-		# def initialize()
-		# 	getKeyboardEvent()
-		# end
+		def initialize()
+			getKeyboardEvent()
+		end
 
 		# 获取键盘设备
 		def self.getKeyboardEvent()
 			# getevent获取到的键盘的名字不是统一的,观察到的名字中都包含" USB"字样
-			system("taskkill /f /IM adb.exe")
-			system("adb kill-server")
+			#Log.debug("adb start-server ...")
 			system("adb start-server")
+			#Log.debug("start getevent ...")
 			str = `adb shell getevent -p`
-			
+			#Log.debug("end getevent ...")
 
 		    begin
 		      events = str.scan(/\/dev\/input\/event.\r\n.* USB.*/)
@@ -47,7 +47,8 @@ module ThinClient
 			  return false
 			end
 			system("adb shell sendevent #{@keyboardEvent} 1 #{keycode} 1")
-			system("#{@SYN_EVENT}")
+			# 按下键盘时可以不发同步, 只要在抬起的时候发就型
+			#system("#{@SYN_EVENT}")
 			return true
 		end
 
@@ -74,6 +75,7 @@ module ThinClient
 			if (args === false || args === [])
 				return false
 			end
+			#Log.debug(`tasklist |findstr adb.exe`)
 			args.each { |key|
 				keyDown(key)
 			}
