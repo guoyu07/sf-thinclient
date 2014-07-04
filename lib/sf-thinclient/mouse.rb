@@ -24,23 +24,24 @@ module ThinClient
 			end
 			str = `adb shell getevent -p`
 		    begin
-		      events = str.scan(/\/dev\/input\/event.\r\n.* Mouse.*/)
+		      events = str.downcase.scan(/\/dev\/input\/event.\r\n.*mouse.*/)
 		      Log.debug("Events:#{events}")
-		      evnets2 = str.scan(/\/dev\/input\/event.\r\n.*OM.*/)
-		      Log.debug("Events2:#{evnets2}")
-		      if (events.size != 1)
-		      	  Log.error("Mouse Not Found. It Cannot Work Without a Mouse Connected to The ThinClient")
-		      	  #return false
+		      
+		      if (@mouseEvent === "" && events.size != 1)
+		      	  Log.debug("\"mouse\" not match")
 		      else
 		          @mouseEvent = events[0].split(/\r/)[0]
 		  	  end
-
-		  	  if (evnets2.size != 1)
-		  	  	  Log.error("Mouse Not Found. It Cannot Work Without a Mouse Connected to The ThinClient")
-	  	  	  else
-	  	  	  	  @mouseEvent = events2[0].split(/\r/)[0]
-	  	  	  end
+			  evnets = str.downcase.scan(/\/dev\/input\/event.\r\n.*om.*/)
+		      Log.debug("Events:#{evnets}")
+			  if (@mouseEvent === "" && events.size != 1)
+			  	  Log.debug("\"om\" not match")
+		      else
+		          @mouseEvent = events[0].split(/\r/)[0]
+		  	  end
+		  
 	  	  	  if (@mouseEvent === "")
+				  Log.error("Mouse Not Found.")
 	  	  	  	  return false
 	  	  	  end
 		      

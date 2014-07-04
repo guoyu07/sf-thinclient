@@ -20,13 +20,25 @@ module ThinClient
 			#Log.debug("end getevent ...")
 
 		    begin
-		      events = str.scan(/\/dev\/input\/event.\r\n.* USB.*/)
+			  events = str.downcase.scan(/\/dev\/input\/event.\r\n.*keyboard.*/)
 		      Log.debug("Events:#{events}")
-		      if (events.size != 2)
-		      	  Log.error("Keyboard Not Found. It Cannot Work Without a Keyboard Connected to The ThinClient")
-		      	  return false
+		      if (@keyboardEvent === "" && events.size != 2)
+		      	  Log.debug("\"keyboard\" not match.")
+			  else
+			      @keyboardEvent = events[1].split(/\r/)[0]
 		      end
-		      @keyboardEvent = events[1].split(/\r/)[0]
+		      events = str.downcase.scan(/\/dev\/input\/event.\r\n.* usb.*/)
+		      Log.debug("Events:#{events}")
+		      if (@keyboardEvent === "" && events.size != 2)
+		      	  Log.debug("\" usb\" not match.")
+			  else
+			      @keyboardEvent = events[1].split(/\r/)[0]
+		      end
+			  if (@keyboardEvent === "")
+				  Log.error("keyboard not found.")
+				  return false
+			  end
+		      
 		      @SYN_EVENT = "adb shell sendevent #{@keyboardEvent} 0 0 0"
 		      
 		      return true
