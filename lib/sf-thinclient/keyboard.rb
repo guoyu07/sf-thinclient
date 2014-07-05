@@ -12,6 +12,9 @@ module ThinClient
 
 		# 获取键盘设备
 		def self.getKeyboardEvent()
+			if @keyboardEvent != ""
+				return @keyboardEvent
+			end
 			# getevent获取到的键盘的名字不是统一的,观察到的名字中都包含" USB"字样
 			#Log.debug("adb start-server ...")
 			system("adb start-server")
@@ -41,7 +44,7 @@ module ThinClient
 		      
 		      @SYN_EVENT = "adb shell sendevent #{@keyboardEvent} 0 0 0"
 		      
-		      return true
+		      return @keyboardEvent
 		    rescue => ex
 		      Log.error("#{ex}")
 		      print ex

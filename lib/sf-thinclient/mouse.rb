@@ -20,7 +20,7 @@ module ThinClient
 		end
 		def self.getMouseEvent()
 			if @mouseEvent != ""
-				return true
+				return @mouseEvent
 			end
 			str = `adb shell getevent -p`
 		    begin
@@ -49,7 +49,7 @@ module ThinClient
 
 		      setResolution()
 		      #print @mouseEvent
-		      return true
+		      return @mouseEvent
 		    rescue => ex
 		      Log.error("#{ex}")
 		      print ex
