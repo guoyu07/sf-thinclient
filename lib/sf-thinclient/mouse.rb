@@ -240,7 +240,7 @@ module ThinClient
 			cmd = "adb shell \""
 			cmd = cmd + "sendevent #{@mouseEvent} 1 274 0;sendevent #{@mouseEvent} 0 0 0;"
 			cmd = cmd + "\""
-			system("#{cmd}"
+			system("#{cmd}")
 			return true
 		end
 
