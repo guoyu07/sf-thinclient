@@ -70,8 +70,12 @@ module ThinClient
 				return false
 			end
 			#n = n / (1 + @diffX)
-			system("adb shell sendevent #{@mouseEvent} 2 0 -#{n}")
-			system("#{@SYN_EVENT}")
+			#system("adb shell sendevent #{@mouseEvent} 2 0 -#{n}")
+			#system("#{@SYN_EVENT}")
+			cmd = "adb shell \""
+			cmd = cmd + "sendevent #{@mouseEvent} 2 0 -#{n};sendevent #{@mouseEvent} 0 0 0;"
+			cmd = cmd + "\""
+			system("#{cmd}")
 			return true
 		end
 		# 向右移动(n个像素)
@@ -88,8 +92,12 @@ module ThinClient
 			end
 			#n = n / (1 + @diffX)
 			#puts "right #{n}"
-			system("adb shell sendevent #{@mouseEvent} 2 0 #{n}")
-			system("#{@SYN_EVENT}")
+			#system("adb shell sendevent #{@mouseEvent} 2 0 #{n}")
+			#system("#{@SYN_EVENT}")
+			cmd = "adb shell \""
+			cmd = cmd + "sendevent #{@mouseEvent} 2 0 #{n};sendevent #{@mouseEvent} 0 0 0;"
+			cmd = cmd + "\""
+			system("#{cmd}")
 			return true
 		end
 		# 向上移动(n个像素)
@@ -105,8 +113,12 @@ module ThinClient
 				return false
 			end
 			#n = n / (1 + @diffY)
-			system("adb shell sendevent #{@mouseEvent} 2 1 -#{n}")
-			system("#{@SYN_EVENT}")
+			#system("adb shell sendevent #{@mouseEvent} 2 1 -#{n}")
+			#system("#{@SYN_EVENT}")
+			cmd = "adb shell \""
+			cmd = cmd + "sendevent #{@mouseEvent} 2 1 -#{n};sendevent #{@mouseEvent} 0 0 0;"
+			cmd = cmd + "\""
+			system("#{cmd}")
 			return true
 		end
 		# 向下移动(n个像素)
@@ -123,8 +135,12 @@ module ThinClient
 			end
 			#n = n / (1 + @diffY)
 			#puts "down #{n}"
-			system("adb shell sendevent #{@mouseEvent} 2 1 #{n}")
-			system("#{@SYN_EVENT}")
+			#system("adb shell sendevent #{@mouseEvent} 2 1 #{n}")
+			#system("#{@SYN_EVENT}")
+			cmd = "adb shell \""
+			cmd = cmd + "sendevent #{@mouseEvent} 2 1 #{n};sendevent #{@mouseEvent} 0 0 0;"
+			cmd = cmd + "\""
+			system("#{cmd}")
 			return true
 		end
 
@@ -169,38 +185,62 @@ module ThinClient
 
 		# 左键按下
 		def self.leftBtnDown()
-			system("adb shell sendevent #{@mouseEvent} 1 272 1")
-			system("#{@SYN_EVENT}")
+			#system("adb shell sendevent #{@mouseEvent} 1 272 1")
+			#system("#{@SYN_EVENT}")
+			cmd = "adb shell \""
+			cmd = cmd + "sendevent #{@mouseEvent} 1 272 1;sendevent #{@mouseEvent} 0 0 0;"
+			cmd = cmd + "\""
+			system("#{cmd}")
 			return true
 		end
 		# 左键抬起
 		def self.leftBtnUp()
-			system("adb shell sendevent #{@mouseEvent} 1 272 0")
-			system("#{@SYN_EVENT}")
+			#system("adb shell sendevent #{@mouseEvent} 1 272 0")
+			#system("#{@SYN_EVENT}")
+			cmd = "adb shell \""
+			cmd = cmd + "sendevent #{@mouseEvent} 1 272 0;sendevent #{@mouseEvent} 0 0 0;"
+			cmd = cmd + "\""
+			system("#{cmd}")
 			return true
 		end
 		# 右键按下
 		def self.rightBtnDown()
-			system("adb shell sendevent #{@mouseEvent} 1 273 1")
-			system("#{@SYN_EVENT}")
+			#system("adb shell sendevent #{@mouseEvent} 1 273 1")
+			#system("#{@SYN_EVENT}")
+			cmd = "adb shell \""
+			cmd = cmd + "sendevent #{@mouseEvent} 1 273 1;sendevent #{@mouseEvent} 0 0 0;"
+			cmd = cmd + "\""
+			system("#{cmd}")
 			return true
 		end
 		# 右键抬起
 		def self.rightBtnUp()
-			system("adb shell sendevent #{@mouseEvent} 1 273 0")
-			system("#{@SYN_EVENT}")
+			#system("adb shell sendevent #{@mouseEvent} 1 273 0")
+			#system("#{@SYN_EVENT}")
+			cmd = "adb shell \""
+			cmd = cmd + "sendevent #{@mouseEvent} 1 273 0;sendevent #{@mouseEvent} 0 0 0;"
+			cmd = cmd + "\""
+			system("#{cmd}")
 			return true
 		end
 		# 滚轮按下
 		def self.middleBtnDown()
-			system("adb shell sendevent #{@mouseEvent} 1 274 1")
-			system("#{@SYN_EVENT}")
+			#system("adb shell sendevent #{@mouseEvent} 1 274 1")
+			#system("#{@SYN_EVENT}")
+			cmd = "adb shell \""
+			cmd = cmd + "sendevent #{@mouseEvent} 1 274 1;sendevent #{@mouseEvent} 0 0 0;"
+			cmd = cmd + "\""
+			system("#{cmd}")
 			return true
 		end
 		# 滚轮抬起
 		def self.middleBtnUp()
-			system("adb shell sendevent #{@mouseEvent} 1 274 0")
-			system("#{@SYN_EVENT}")
+			#system("adb shell sendevent #{@mouseEvent} 1 274 0")
+			#system("#{@SYN_EVENT}")
+			cmd = "adb shell \""
+			cmd = cmd + "sendevent #{@mouseEvent} 1 274 0;sendevent #{@mouseEvent} 0 0 0;"
+			cmd = cmd + "\""
+			system("#{cmd}"
 			return true
 		end
 
