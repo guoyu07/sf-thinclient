@@ -81,6 +81,8 @@ module ThinClient
 			return true
 		end
 
+
+
 		# 发送键盘按键,多个按键用"+"隔开(按键名称见KeyCode.Key)
 		def self.sendKeys(keys)
 			if false === getKeyboardEvent()
@@ -90,13 +92,21 @@ module ThinClient
 			if (args === false || args === [])
 				return false
 			end
-			#Log.debug(`tasklist |findstr adb.exe`)
+			
+			cmd1 = "adb shell \""
+			cmd2 = ""
 			args.each { |key|
-				keyDown(key)
+				cmd1 = cmd1 + "sendevent #{@keyboardEvent} 1 #{key} 1;"
+				cmd2 = cmd2 + "sendevent #{@keyboardEvent} 1 #{key} 0;"
 			}
-			args.each { |key|
-				keyUp(key)
-			}
+	
+			cmd2 = cmd2 + "sendevent #{@keyboardEvent} 0 0 0;"
+			cmd2 = cmd2 + "\""
+			cmd = cmd1 + cmd2
+			
+			system("#{cmd}")
+		
+		
 			return true
 		end
 
