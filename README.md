@@ -1,6 +1,6 @@
 # Sf::Thinclient
 
-TODO: Write a gem description
+一个gem包,用于ssl瘦客户机自动化测试
 
 ## Installation
 
@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+http://200.200.136.45:81/sf-thinclient/
 
 ## Contributing
 
