@@ -43,7 +43,10 @@ module ThinClient
 			0x007d,  0x0038,  0x001d, 0x002a,
 			0x0029,  0x000c,  0x000d, 0x001a,
 			0x001b,	 0X0027,  0X0028, 0X002B,
-			0X0033,  0X0034,  0X0035
+			0X0033,  0X0034,  0X0035,
+			#add,2014-07-30
+			0x0029,  0x000d,  0X002B, 0X0035,
+			0x0063,  0x007f
 
 		]
 
@@ -88,7 +91,11 @@ module ThinClient
 			 "KEY_WIN", "KEY_ALT", "KEY_CTRL", "KEY_SHIFT",
 			 "KEY_`",   "KEY_-",   "KEY_=",    "KEY_[",
 			 "KEY_]",	"KEY_;",   "KEY_'",	   "KEY_\\",
-			 "KEY_,", 	"KEY_.",   "KEY_/"
+			 "KEY_,", 	"KEY_.",   "KEY_/",
+			 #add,2014-07-30
+			 "KEY_~",   "KEY_PLUS",  "KEY_|",  "KEY_?",
+			 "KEY_PRINTSCREEN","KEY_APPS"
+
 		]
 
 		def self.key2code(key)

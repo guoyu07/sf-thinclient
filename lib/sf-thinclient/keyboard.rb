@@ -93,13 +93,42 @@ module ThinClient
 				return false
 			end
 			
+			#如果组合键中有alt键,则让alt键先释放
 			cmd1 = "adb shell \""
 			cmd2 = ""
-			args.each { |key|
-				cmd1 = cmd1 + "sendevent #{@keyboardEvent} 1 #{key} 1;"
-				cmd2 = cmd2 + "sendevent #{@keyboardEvent} 1 #{key} 0;"
+			##按键按下的顺序不变
+			args.each { |code|
+				cmd1 = cmd1 + "sendevent #{@keyboardEvent} 1 #{code} 1;"
+				#cmd2 = cmd2 + "sendevent #{@keyboardEvent} 1 #{key} 0;"
 			}
+			##按键释放顺序调整
+			indexs = []
+			i = 0
+			while i < args.length
+				if (KeyCode.code2key(args[i]).upcase == "KEY_ALT".upcase \
+					|| KeyCode.code2key(args[i]).upcase == "KEY_rightalt".upcase \
+					|| KeyCode.code2key(args[i]).upcase == "KEY_leftalt".upcase)
+					indexs.push(i)
+				end
+				i = i + 1
+			end
 	
+			if (indexs.length > 1)
+				Log.error("Too many ALT key")
+				return false
+			end
+	
+			if (indexs.length == 1)
+				tmp = args[indexs[0]]
+				args.delete_at(indexs[0])
+				args.unshift(tmp)
+			end
+		
+			args.each { |code|
+				cmd2 = cmd2 + "sendevent #{@keyboardEvent} 1 #{code} 0;"
+			}
+			
+
 			cmd2 = cmd2 + "sendevent #{@keyboardEvent} 0 0 0;"
 			cmd2 = cmd2 + "\""
 			cmd = cmd1 + cmd2
@@ -121,6 +150,7 @@ module ThinClient
 			end	
 			args = []
 			tmp = keys.split(/\+/)
+		
 			Log.debug("Keys:#{tmp}")
 			tmp.each { |key|
 				key = "KEY_" + key.upcase
@@ -130,6 +160,8 @@ module ThinClient
 				end
 				args.push(index)
 			}
+
+
 			return args
 		end
 		
