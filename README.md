@@ -27,3 +27,16 @@ http://200.200.136.45:81/sf-thinclient/
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+
+## Update
+
+1. 不需要再使用USB连接了，直接通过tcp方式连接
+
+
+## Hope
+
+只需要在瘦客户机上插上电源和网线，目前来看，自动化测试时还需要在瘦客户机上插键盘和鼠标。
+
+
+## 
