@@ -1,5 +1,6 @@
 require "rubygems"
 require "logger"
+require "sf-thinclient/myadb"
 require "sf-thinclient/image"
 require "sf-thinclient/input"
 require "sf-thinclient/keyboard"

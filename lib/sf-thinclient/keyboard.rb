@@ -11,27 +11,28 @@ module ThinClient
 		end
 
 		# 获取键盘设备
-		def self.getKeyboardEvent()
+		def self.getKeyboardEvent(device = "onlyone")
 			if @keyboardEvent != ""
 				return @keyboardEvent
 			end
 			# getevent获取到的键盘的名字不是统一的,观察到的名字中都包含" USB"字样
 			#Log.debug("adb start-server ...")
-			system("adb start-server")
+			#system("adb start-server")
 			#Log.debug("start getevent ...")
-			str = `adb shell getevent -p`
+			#str = `adb shell getevent -p`
+			str = Myadb.shell(device, "getevent -p")
 			#Log.debug("end getevent ...")
 
 		    begin
 			  events = str.downcase.scan(/\/dev\/input\/event.\r\n.*keyboard.*/)
-		      Log.debug("Events:#{events}")
+		      #Log.debug("Events:#{events}")
 		      if (@keyboardEvent === "" && events.size != 2)
 		      	  Log.debug("\"keyboard\" not match.")
 			  else
 			      @keyboardEvent = events[1].split(/\r/)[0]
 		      end
 		      events = str.downcase.scan(/\/dev\/input\/event.\r\n.* usb.*/)
-		      Log.debug("Events:#{events}")
+		      #Log.debug("Events:#{events}")
 		      if (@keyboardEvent === "" && events.size != 2)
 		      	  Log.debug("\" usb\" not match.")
 			  else
@@ -42,8 +43,8 @@ module ThinClient
 				  return false
 			  end
 		      
-		      @SYN_EVENT = "adb shell sendevent #{@keyboardEvent} 0 0 0"
-		      
+		      #@SYN_EVENT = "adb shell sendevent #{@keyboardEvent} 0 0 0"
+		      @SYN_EVENT = Myadb.shell(device, "sendevent #{@keyboardEvent} 0 0 0")
 		      return @keyboardEvent
 		    rescue => ex
 		      Log.error("#{ex}")
@@ -53,7 +54,7 @@ module ThinClient
 		end
 
 		# 按下键盘按键
-		def self.keyDown(keycode)
+		def self.keyDown(keycode, device)
 			begin
 			  keycode = keycode.to_s		
 			rescue => ex
@@ -61,14 +62,15 @@ module ThinClient
 			  print("#{ex}")
 			  return false
 			end
-			system("adb shell sendevent #{@keyboardEvent} 1 #{keycode} 1")
+			#system("adb shell sendevent #{@keyboardEvent} 1 #{keycode} 1")
+			return false if false == Myadb.shell(device, "sendevent #{@keyboardEvent} 1 #{keycode} 1")
 			# 按下键盘时可以不发同步, 只要在抬起的时候发就型
 			#system("#{@SYN_EVENT}")
 			return true
 		end
 
 		# 抬起键盘按键
-		def self.keyUp(keycode)
+		def self.keyUp(keycode, device)
 			begin
 			  keycode = keycode.to_s		
 			rescue => ex
@@ -76,16 +78,18 @@ module ThinClient
 			  print("#{ex}")
 			  return false
 			end	
-			system("adb shell sendevent #{@keyboardEvent} 1 #{keycode} 0")
-			system("#{@SYN_EVENT}")
+			#system("adb shell sendevent #{@keyboardEvent} 1 #{keycode} 0")
+			#system("#{@SYN_EVENT}")
+			Myadb.shell(device, "sendevent #{@keyboardEvent} 1 #{keycode} 0")
+			@SYN_EVENT
 			return true
 		end
 
 
 
 		# 发送键盘按键,多个按键用"+"隔开(按键名称见KeyCode.Key)
-		def self.sendKeys(keys)
-			if false === getKeyboardEvent()
+		def self.sendKeys(keys, device = "onlyone")
+			if false === getKeyboardEvent(device)
 				return false
 			end
 			args = dealArg(keys)
@@ -94,7 +98,8 @@ module ThinClient
 			end
 			
 			#如果组合键中有alt键,则让alt键先释放
-			cmd1 = "adb shell \""
+			#cmd1 = "adb shell \""
+			cmd1 = ""
 			cmd2 = ""
 			##按键按下的顺序不变
 			args.each { |code|
@@ -133,7 +138,8 @@ module ThinClient
 			cmd2 = cmd2 + "\""
 			cmd = cmd1 + cmd2
 			
-			system("#{cmd}")
+			#system("#{cmd}")
+			return false if false == Myadb.shell(device, "#{cmd}")
 		
 		
 			return true
