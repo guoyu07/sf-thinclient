@@ -16,12 +16,7 @@ module ThinClient
 				return @keyboardEvent
 			end
 			# getevent获取到的键盘的名字不是统一的,观察到的名字中都包含" USB"字样
-			#Log.debug("adb start-server ...")
-			#system("adb start-server")
-			#Log.debug("start getevent ...")
-			#str = `adb shell getevent -p`
 			str = Myadb.shell(device, "getevent -p")
-			#Log.debug("end getevent ...")
 
 		    begin
 			  events = str.downcase.scan(/\/dev\/input\/event.\r\n.*keyboard.*/)

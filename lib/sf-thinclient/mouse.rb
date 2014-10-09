@@ -23,24 +23,27 @@ module ThinClient
 			if @mouseEvent != ""
 				return @mouseEvent
 			end
-			#str = `adb shell getevent -p`
 			str = Myadb.shell(device, "getevent -p")
 		    begin
 		      events = str.downcase.scan(/\/dev\/input\/event.\r\n.*mouse.*/)
-		      #Log.debug("Events:#{events}")
+		      Log.debug("Events:#{events}")
 		      
 		      if (@mouseEvent === "" && events.size != 1)
 		      	  Log.debug("\"mouse\" not match")
 		      else
 		          @mouseEvent = events[0].split(/\r/)[0]
 		  	  end
-			  events = str.downcase.scan(/\/dev\/input\/event.\r\n.*om.*/)
-		      #Log.debug("Events:#{events}")
-			  if (@mouseEvent === "" && events.size != 1)
-			  	  Log.debug("\"om\" not match")
-		      else
-		          @mouseEvent = events[0].split(/\r/)[0]
+
+		  	  if (@mouseEvent === "")
+		  	  	  events = str.downcase.scan(/\/dev\/input\/event.\r\n.*om.*/)
+			      Log.debug("Events:#{events}")
+				  if (@mouseEvent === "" && events.size != 1)
+				  	  Log.debug("\"om\" not match")
+			      else
+			          @mouseEvent = events[0].split(/\r/)[0]
+			  	  end
 		  	  end
+			  
 		  
 	  	  	  if (@mouseEvent === "")
 				  Log.error("Mouse Not Found.")

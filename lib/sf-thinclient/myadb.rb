@@ -18,7 +18,6 @@ module ThinClient
 				else
 					ret = `adb -s #{device} shell #{cmd}`
 				end
-				Log.debug(ret)
 				return false if ret.include?("error")
 				return ret
 			end
