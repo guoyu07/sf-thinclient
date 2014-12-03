@@ -2,22 +2,11 @@
 module ThinClient
 	class Mouse
 		@mouseEvent = ""
-		@SYN_EVENT = ""
-		@realX = 1920.0
-		@realY = 1080.0
-		@virtualX = 1280.0
-		@virtualY = 720.0
-		# 瘦客户机上移动n个像素，实际需要移动n+n*0.2的
-		@diffX = 0.2
-		@diffY = 0.2
+
 		def initialize()
 			getMouseEvent()
 		end
-		# 先设定独享桌面的分辨率
-		def self.setResolution(x = 1280, y = 720)
-			@virtualX = x
-			@virtualY = y
-		end
+
 		# _OK
 		def self.getMouseEvent(device="onlyone")
 			if @mouseEvent != ""
@@ -49,17 +38,17 @@ module ThinClient
 				  Log.error("Mouse Not Found.")
 	  	  	  	  return false
 	  	  	  end
-		      
-		      #@SYN_EVENT = "adb shell sendevent #{@mouseEvent} 0 0 0"
-		      @SYN_EVENT = Myadb.shell(device, "sendevent #{@mouseEvent} 0 0 0")
 
-		      setResolution()
 		      return @mouseEvent
 		    rescue => ex
 		      Log.error("#{ex}")
 		      print ex
 		      return false
 		    end
+		end
+
+		def self.sync(device)
+			return Myadb.shell(device, "sendevent #{@mouseEvent} 0 0 0")
 		end
 
 		# 向左移动(n个像素)
@@ -74,15 +63,12 @@ module ThinClient
 			if (false === getMouseEvent(device))
 				return false
 			end
-	
-	
-			# cmd = "adb shell \""
-			# cmd = cmd + "sendevent #{@mouseEvent} 2 0 -#{n};sendevent #{@mouseEvent} 0 0 0;"
-			# cmd = cmd + "\""
-			# system("#{cmd}")
+
 			return false if false == Myadb.shell(device, "sendevent #{@mouseEvent} 2 0 -#{n};sendevent #{@mouseEvent} 0 0 0;")
+			return false if false == sync(device)
 			return true
 		end
+
 		# 向右移动(n个像素)
 		def self.right(n = 1, device = "onlyone")
 			begin
@@ -96,13 +82,11 @@ module ThinClient
 				return false
 			end
 	
-			# cmd = "adb shell \""
-			# cmd = cmd + "sendevent #{@mouseEvent} 2 0 #{n};sendevent #{@mouseEvent} 0 0 0;"
-			# cmd = cmd + "\""
-			# system("#{cmd}")
 			return false if false == Myadb.shell(device, "sendevent #{@mouseEvent} 2 0 #{n};sendevent #{@mouseEvent} 0 0 0;")
+			return false if false == sync(device)
 			return true
 		end
+
 		# 向上移动(n个像素)
 		def self.up(n = 1, device = "onlyone")
 			begin
@@ -116,13 +100,11 @@ module ThinClient
 				return false
 			end
 
-			# cmd = "adb shell \""
-			# cmd = cmd + "sendevent #{@mouseEvent} 2 1 -#{n};sendevent #{@mouseEvent} 0 0 0;"
-			# cmd = cmd + "\""
-			# system("#{cmd}")
 			return false if false == Myadb.shell(device, "sendevent #{@mouseEvent} 2 1 -#{n};sendevent #{@mouseEvent} 0 0 0;")
+			return false if false == sync(device)
 			return true
 		end
+
 		# 向下移动(n个像素)
 		def self.down(n = 1, device = "onlyone")
 			begin
@@ -136,11 +118,8 @@ module ThinClient
 				return false
 			end
 
-			# cmd = "adb shell \""
-			# cmd = cmd + "sendevent #{@mouseEvent} 2 1 #{n};sendevent #{@mouseEvent} 0 0 0;"
-			# cmd = cmd + "\""
-			# system("#{cmd}")
 			return false if false == Myadb.shell(device, "sendevent #{@mouseEvent} 2 1 #{n};sendevent #{@mouseEvent} 0 0 0;")
+			return false if false == sync(device)
 			return true
 		end
 
@@ -185,61 +164,35 @@ module ThinClient
 
 		# 左键按下
 		def self.leftBtnDown(device = "onlyone")
-			
-			# cmd = "adb shell \""
-			# cmd = cmd + "sendevent #{@mouseEvent} 1 272 1;sendevent #{@mouseEvent} 0 0 0;"
-			# cmd = cmd + "\""
-			# system("#{cmd}")
 			return false if false == Myadb.shell(device, "sendevent #{@mouseEvent} 1 272 1;sendevent #{@mouseEvent} 0 0 0;")
 			return true
 		end
+
 		# 左键抬起
 		def self.leftBtnUp(device = "onlyone")
-		
-			# cmd = "adb shell \""
-			# cmd = cmd + "sendevent #{@mouseEvent} 1 272 0;sendevent #{@mouseEvent} 0 0 0;"
-			# cmd = cmd + "\""
-			# system("#{cmd}")
 			return false if false == Myadb.shell(device, "sendevent #{@mouseEvent} 1 272 0;sendevent #{@mouseEvent} 0 0 0;")
 			return true
 		end
+
 		# 右键按下
 		def self.rightBtnDown(device = "onlyone")
-		
-			# cmd = "adb shell \""
-			# cmd = cmd + "sendevent #{@mouseEvent} 1 273 1;sendevent #{@mouseEvent} 0 0 0;"
-			# cmd = cmd + "\""
-			# system("#{cmd}")
 			return false if false == Myadb.shell(device, "sendevent #{@mouseEvent} 1 273 1;sendevent #{@mouseEvent} 0 0 0;")
 			return true
 		end
+
 		# 右键抬起
 		def self.rightBtnUp(device = "onlyone")
-		
-			# cmd = "adb shell \""
-			# cmd = cmd + "sendevent #{@mouseEvent} 1 273 0;sendevent #{@mouseEvent} 0 0 0;"
-			# cmd = cmd + "\""
-			# system("#{cmd}")
 			return false if false == Myadb.shell(device, "sendevent #{@mouseEvent} 1 273 0;sendevent #{@mouseEvent} 0 0 0;")
 			return true
 		end
+
 		# 滚轮按下
 		def self.middleBtnDown(device = "onlyone")
-		
-			# cmd = "adb shell \""
-			# cmd = cmd + "sendevent #{@mouseEvent} 1 274 1;sendevent #{@mouseEvent} 0 0 0;"
-			# cmd = cmd + "\""
-			# system("#{cmd}")
 			return false if false == Myadb.shell(device, "sendevent #{@mouseEvent} 1 274 1;sendevent #{@mouseEvent} 0 0 0;")
 			return true
 		end
 		# 滚轮抬起
 		def self.middleBtnUp(device = "onlyone")
-
-			# cmd = "adb shell \""
-			# cmd = cmd + "sendevent #{@mouseEvent} 1 274 0;sendevent #{@mouseEvent} 0 0 0;"
-			# cmd = cmd + "\""
-			# system("#{cmd}")
 			return false if false == Myadb.shell(device, "sendevent #{@mouseEvent} 1 274 0;sendevent #{@mouseEvent} 0 0 0;")
 			return true
 		end
@@ -252,7 +205,8 @@ module ThinClient
 			end
 			tmp1 = leftBtnDown(device)
 			tmp2 = leftBtnUp(device)
-			if (tmp1 === false || tmp2 === false)
+			tmp3 = sync(device)
+			if (tmp1 === false || tmp2 === false || tmp3 === false)
 				return false
 			end
 			return true
@@ -267,7 +221,8 @@ module ThinClient
 			tmp2 = leftBtnUp(device)
 			tmp3 = leftBtnDown(device)
 			tmp4 = leftBtnUp(device)
-			if (tmp1 === false || tmp2 ===false || tmp3 === false || tmp4 === false)
+			tmp5 = sync(device)
+			if (tmp1 === false || tmp2 ===false || tmp3 === false || tmp4 === false || tmp5 === false)
 				return false
 			end
 			return true
@@ -279,9 +234,11 @@ module ThinClient
 				return false
 			end
 			tmp1 = leftBtnDown(device)
+			tmp3 = sync(device)
 			sleep(t)
 			tmp2 = leftBtnUp(device)
-			if (tmp1 === false || tmp2 === false)
+			tmp4 = sync(device)
+			if (tmp1 === false || tmp2 === false || tmp4 === false || tmp5 === false)
 				return false
 			end
 			return true
@@ -293,7 +250,6 @@ module ThinClient
 				return false
 			end
 			tmp1 = leftBtnDown(device)
-			#moveTo(x2, y2)
 			begin
 			  x1 = x1.to_i
 			  y1 = y1.to_i
@@ -307,7 +263,8 @@ module ThinClient
 			tmp2 = right(x2 - x1, device)
 			tmp3 = down(y2 - y1, device)
 			tmp4 = leftBtnUp(device)
-			if (tmp1 === false || tmp2 ===false || tmp3 === false || tmp4 === false)
+			tmp5 = sync(device)
+			if (tmp1 === false || tmp2 ===false || tmp3 === false || tmp4 === false || tmp5 === false)
 				return false
 			end
 			return true
@@ -320,7 +277,8 @@ module ThinClient
 			end
 			tmp1 = rightBtnDown(device)
 			tmp2 = rightBtnUp(device)
-			if (tmp1 === false || tmp2 === false)
+			tmp3 = sync(device)
+			if (tmp1 === false || tmp2 === false || tmp3 === false)
 				return false
 			end
 			return true
@@ -339,10 +297,8 @@ module ThinClient
 				return false
 			end
 			while (n > 0)
-				#system("adb shell sendevent #{@mouseEvent} 2 8 -1")
-				#system("#{@SYN_EVENT}")
 				return false if false == Myadb.shell(device, "sendevent #{@mouseEvent} 2 8 -1")
-				return false if false == @SYN_EVENT
+				return false if false == sync(device)
 				n -= 1
 			end
 			return true
@@ -360,10 +316,8 @@ module ThinClient
 				return false
 			end
 			while (n > 0)
-				# system("adb shell sendevent #{@mouseEvent} 2 8 1")
-				# system("#{@SYN_EVENT}")
 				return false if false == Myadb.shell(device, "sendevent #{@mouseEvent} 2 8 1")
-				return false if false == @SYN_EVENT
+				return false if false == sync(device)
 				n -= 1
 			end
 			return true
@@ -376,7 +330,8 @@ module ThinClient
 			end
 			tmp1 = middleBtnDown(device)
 			tmp2 = middleBtnUp(device)
-			if (tmp1 === false || tmp2 === false)
+			tmp3 = sync(device)
+			if (tmp1 === false || tmp2 === false || tmp3 === false)
 				return false
 			end
 			return true

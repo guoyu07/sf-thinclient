@@ -81,13 +81,13 @@ module ThinClient
 		end
 
 		# 通过鼠标点击图片(无论是瘦客户机的还是虚拟桌面的都可以点击到)
-		def self.mouseClick(img, similar = 0.8, device = "onlyone")
+		def self.mouseClick(img, similar = 0.8, device = "onlyone", offset_x = 0, offset_y = 0)
 			position = getPositionOnScreen(img, similar, device)
 			if (position[:X] === 0 || position[:Y] === 0)
 				return false
 			end
 			#print ("position:#{position}\n")
-			tmp = Mouse.click(position[:X], position[:Y], device)
+			tmp = Mouse.click(position[:X] + offset_x, position[:Y] + offset_y, device)
 			if (tmp === false)
 				return false
 			end

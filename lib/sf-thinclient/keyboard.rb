@@ -37,9 +37,7 @@ module ThinClient
 				  Log.error("keyboard not found.")
 				  return false
 			  end
-		      
-		      #@SYN_EVENT = "adb shell sendevent #{@keyboardEvent} 0 0 0"
-		      @SYN_EVENT = Myadb.shell(device, "sendevent #{@keyboardEvent} 0 0 0")
+
 		      return @keyboardEvent
 		    rescue => ex
 		      Log.error("#{ex}")
@@ -48,6 +46,9 @@ module ThinClient
 		    end
 		end
 
+		def self.sync(device)
+			return Myadb.shell(device, "sendevent #{@keyboardEvent} 0 0 0")
+		end
 		# 按下键盘按键
 		def self.keyDown(keycode, device)
 			begin
@@ -73,10 +74,8 @@ module ThinClient
 			  print("#{ex}")
 			  return false
 			end	
-			#system("adb shell sendevent #{@keyboardEvent} 1 #{keycode} 0")
-			#system("#{@SYN_EVENT}")
-			Myadb.shell(device, "sendevent #{@keyboardEvent} 1 #{keycode} 0")
-			@SYN_EVENT
+			return false if false === Myadb.shell(device, "sendevent #{@keyboardEvent} 1 #{keycode} 0")
+			return false if false === sync(device)
 			return true
 		end
 

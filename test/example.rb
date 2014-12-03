@@ -24,11 +24,11 @@ require "./../lib/sf-thinclient/version"
 #puts ThinClient::Input.text("acb", "200.200.136.50:5555")
 
 ## Mouse
-puts ThinClient::Mouse.moveTo(100,100, "200.200.136.224:5555")
-#puts ThinClient::Mouse.rollClick(100,100,"200.200.136.50:5555")
+#puts ThinClient::Mouse.moveTo(100,100)
+#puts ThinClient::Mouse.rollClick(100,100)
 
 ## Keyboard
-#puts ThinClient::Keyboard.sendKeys("HOME", "200.200.136.44:5555")
+#puts ThinClient::Keyboard.sendKeys("win+r")
 
 
 

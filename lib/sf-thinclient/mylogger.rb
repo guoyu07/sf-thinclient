@@ -16,6 +16,7 @@ module ThinClient
 		def self.debug(str)
 			init()
 			@myLogger.debug(str)
+			puts str
 		end
 
 		def self.error(str)

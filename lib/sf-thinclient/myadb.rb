@@ -12,7 +12,7 @@ module ThinClient
 			end
 			# 执行shell命令
 			def shell(device, cmd)
-				Log.debug(device+","+cmd)
+				Log.debug("adb shell " + device+","+cmd)
 				if (device == "onlyone")
 					ret = `adb shell #{cmd}`
 				else
