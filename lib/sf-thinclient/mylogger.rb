@@ -3,34 +3,36 @@ require 'logger'
 
 module ThinClient
 	class Log
+		@myLogger = Logger.new(File.new(File.join("ThinClient.log"), "a"))
+		@myLogger.datetime_format = "%m%d-%H:%M:%S"
 		def self.init()
 			@myLogger = Logger.new(File.new(File.join("ThinClient.log"), "a"))
 			@myLogger.datetime_format = "%m%d-%H:%M:%S"
 		end
 		
 		def self.info(str)
-			init()
+			#init()
 			@myLogger.info(str)
 		end
 
 		def self.debug(str)
-			init()
+			#init()
 			@myLogger.debug(str)
 			puts str
 		end
 
 		def self.error(str)
-			init()
+			#init()
 			@myLogger.error(str)
 		end
 
 		def self.warn(str)
-			init()
+			#init()
 			@myLogger.warn(str)
 		end
 
 		def self.fatal(str)
-			init()
+			#init()
 			@myLogger.fatal(str)
 		end
 	end

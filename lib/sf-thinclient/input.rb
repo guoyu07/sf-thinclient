@@ -41,7 +41,7 @@ module ThinClient
 
 			#tmp = `adb shell input tap`
 			tmp = Myadb.shell(device, "input tap")
-			if not tmp.include?("input tap")
+			if not tmp.include?("tap")
 				Log.error("Error: adb shell input tap error.")
 				print("Error: adb shell input tap error.\n")
 				return false
