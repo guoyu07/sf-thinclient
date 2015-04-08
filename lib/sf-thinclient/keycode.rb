@@ -46,7 +46,9 @@ module ThinClient
 			0X0033,  0X0034,  0X0035,
 			#add,2014-07-30
 			0x0029,  0x000d,  0X002B, 0X0035,
-			0x0063,  0x007f
+			0x0063,  0x007f,
+			#add,2015-03-10
+			0x00b0
 
 		]
 
@@ -94,7 +96,8 @@ module ThinClient
 			 "KEY_,", 	"KEY_.",   "KEY_/",
 			 #add,2014-07-30
 			 "KEY_~",   "KEY_PLUS",  "KEY_|",  "KEY_?",
-			 "KEY_PRINTSCREEN","KEY_APPS"
+			 "KEY_PRINTSCREEN","KEY_APPS",
+			 "KEY_SETTING"
 
 		]
 

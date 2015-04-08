@@ -25,6 +25,7 @@ module ThinClient
 		      	  Log.debug("\"keyboard\" not match.")
 			  else
 			      @keyboardEvent = events[1].split(/\r/)[0]
+			      return @keyboardEvent
 		      end
 		      events = str.downcase.scan(/\/dev\/input\/event.\r\n.* usb.*/)
 		      #Log.debug("Events:#{events}")
@@ -32,6 +33,7 @@ module ThinClient
 		      	  Log.debug("\" usb\" not match.")
 			  else
 			      @keyboardEvent = events[1].split(/\r/)[0]
+			      return @keyboardEvent
 		      end
 			  if (@keyboardEvent === "")
 				  Log.error("keyboard not found.")

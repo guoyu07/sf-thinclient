@@ -21,6 +21,7 @@ module ThinClient
 		      	  Log.debug("\"mouse\" not match")
 		      else
 		          @mouseEvent = events[0].split(/\r/)[0]
+		          return @mouseEvent
 		  	  end
 
 		  	  if (@mouseEvent === "")
@@ -30,6 +31,7 @@ module ThinClient
 				  	  Log.debug("\"om\" not match")
 			      else
 			          @mouseEvent = events[0].split(/\r/)[0]
+			          return @mouseEvent
 			  	  end
 		  	  end
 			  
